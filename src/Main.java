@@ -222,9 +222,12 @@ public class Main {
     private static String bars(double percent) {
         StringBuilder barGenerator = new StringBuilder();
 
-        for (int i = 0; i < Math.round(percent * 100 / 10); i++) {
+        // Add a square for every ~10
+        for (int i = 0; i < Math.round(percent * 10); i++) {
             barGenerator.append("◼");
         }
+
+        // Show the % of total at the end of the squares
         return barGenerator + " " + Double.toString(Math.round(percent * 100)) + "%";
     }
 
@@ -238,6 +241,8 @@ public class Main {
      */
     private static void barSetup(SongManager importer, JLabel br1, JLabel br2, JLabel br3) {
         long total_in_playlists = importer.getActiveSong().spotify_playlists() + importer.getActiveSong().apple_playlists() + importer.getActiveSong().deezer_playlists();
+
+        // Percentage of the total playlists were spotify, apple, and deezer
         br1.setText("Spotify:  " + bars((double) importer.getActiveSong().spotify_playlists() / total_in_playlists));
         br2.setText("Apple:    " + bars((double) importer.getActiveSong().apple_playlists() / total_in_playlists));
         br3.setText("Deezer: " + bars((double) importer.getActiveSong().deezer_playlists() / total_in_playlists));
