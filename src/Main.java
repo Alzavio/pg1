@@ -136,21 +136,27 @@ public class Main {
              */
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Find the song with the previous index in the same year
-                Song newSong = importer.getSong(importer.getYearIndex(activeSongYear), activeSongIndex+1);
 
-                // Set as the active song
-                importer.setActiveSong(newSong);
-                activeSongIndex++;
+                System.out.println(activeSongIndex);
+                System.out.println(importer.getSongCount(Integer.toString(activeSongYear))-1);
+                if (activeSongIndex < importer.getSongCount(Integer.toString(activeSongYear))-1 ) {
+                    // Find the song with the previous index in the same year
+                    Song newSong = importer.getSong(importer.getYearIndex(activeSongYear), activeSongIndex + 1);
 
-                // Set the first song of that year
-                t1.setText(newSong.track_name());
-                t2.setText(newSong.artist_name());
-                t3.setText(newSong.release_date());
-                t4.setText(newSong.total_streams());
 
-                // Reruns the playlist bars
-                barSetup(importer, br1, br2, br3);
+                    // Set as the active song
+                    importer.setActiveSong(newSong);
+                    activeSongIndex++;
+
+                    // Set the first song of that year
+                    t1.setText(newSong.track_name());
+                    t2.setText(newSong.artist_name());
+                    t3.setText(newSong.release_date());
+                    t4.setText(newSong.total_streams());
+
+                    // Reruns the playlist bars
+                    barSetup(importer, br1, br2, br3);
+                }
             }
         });
 
@@ -160,21 +166,24 @@ public class Main {
              */
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Find the song with the previous index in the same year
-                Song newSong = importer.getSong(importer.getYearIndex(activeSongYear), activeSongIndex-1);
 
-                // Set as the active song
-                importer.setActiveSong(newSong);
-                activeSongIndex--;
+                if (activeSongIndex > 0) {
+                    // Find the song with the previous index in the same year
+                    Song newSong = importer.getSong(importer.getYearIndex(activeSongYear), activeSongIndex - 1);
 
-                // Set the first song of that year
-                t1.setText(newSong.track_name());
-                t2.setText(newSong.artist_name());
-                t3.setText(newSong.release_date());
-                t4.setText(newSong.total_streams());
+                    // Set as the active song
+                    importer.setActiveSong(newSong);
+                    activeSongIndex--;
 
-                // Reruns the playlist bars
-                barSetup(importer, br1, br2, br3);
+                    // Set the first song of that year
+                    t1.setText(newSong.track_name());
+                    t2.setText(newSong.artist_name());
+                    t3.setText(newSong.release_date());
+                    t4.setText(newSong.total_streams());
+
+                    // Reruns the playlist bars
+                    barSetup(importer, br1, br2, br3);
+                }
             }
         });
 

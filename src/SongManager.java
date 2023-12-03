@@ -24,17 +24,11 @@ public class SongManager implements SongManagerInterface {
 
             CSVReader songStatReader = new CSVReader(new FileReader("count-by-release-year.csv"));
 
-            // Create a list of years
-            // Note to professor: I am using ArrayList but just in the importing process.
-            // It gets stored as ana array in the YearlySongAmount variable
-            ArrayList<String> years = new ArrayList<String>();
-
             // Populate the list with all the years in the csv and YearCount
             String[] nextLine;
             songStatReader.readNext();
 
             while ((nextLine = songStatReader.readNext()) != null) {
-                years.add(nextLine[0]);
                 YearCount++;
             }
 
@@ -58,7 +52,7 @@ public class SongManager implements SongManagerInterface {
             CSVReader songReader = new CSVReader(new FileReader("spotify-2023.csv"));
 
             // Jagged array with songs
-            SongRecords = new Song[years.size()+2][];
+            SongRecords = new Song[iterator+2][];
             // Used to set the "y"/row of the 2d array. Starts at -1 due to loop starting with rowCount++.
             int rowCount = -1;
             String yearHolder = "";
@@ -73,7 +67,7 @@ public class SongManager implements SongManagerInterface {
 
                 // Sets the row width based on number of songs
                 if (!Objects.equals(yearHolder, nextLine[3])) {
-                    SongRecords[years.indexOf(nextLine[3])] = new Song[getSongCount(nextLine[3])];
+                    SongRecords[getYearIndex(nextLine[3])] = new Song[getSongCount(nextLine[3])];
                 }
 
                 track_name = nextLine[0];
@@ -95,7 +89,7 @@ public class SongManager implements SongManagerInterface {
                         rowCount++;
 
                         // Adds the new Song instance to the year index and appropriate row
-                        index = years.indexOf(nextLine[3]);
+                        index = getYearIndex(nextLine[3]);
                         SongRecords[index][rowCount] = new Song(track_name, artist_name, release_date, total_streams, Integer.parseInt(nextLine[3]), Long.parseLong(nextLine[6].replace(",", "")), Long.parseLong(nextLine[9].replace(",", "")), Long.parseLong(nextLine[11].replace(",", "")));
 
                     } else {
@@ -103,7 +97,7 @@ public class SongManager implements SongManagerInterface {
                         rowCount = 0;
 
                         // Adds the new Song instance to the year index and appropriate row
-                        index = years.indexOf(nextLine[3]);
+                        index = getYearIndex(nextLine[3]);
                         activeSong = new Song(track_name, artist_name, release_date, total_streams, Integer.parseInt(nextLine[3]), Long.parseLong(nextLine[6].replace(",", "")), Long.parseLong(nextLine[9].replace(",", "")), Long.parseLong(nextLine[11].replace(",", "")));
 
                         // Adds the new Song instance to the year and appropriate row
@@ -204,6 +198,15 @@ public class SongManager implements SongManagerInterface {
             }
         }
 
+        return -1;
+    }
+
+    public int getYearIndex(String year) {
+        for (int i = 0; i < YearCount; i++) {
+            if (Objects.equals(YearlySongAmount[i][0], year)) {
+                return i;
+            }
+        }
         return -1;
     }
 
